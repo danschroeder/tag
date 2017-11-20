@@ -18,8 +18,15 @@
   },
   "homepage": "https://github.com/danschroeder/tag#readme",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "express-vue": "^4.0.13",
+    "helmet": "^3.9.0",
     "http": "0.0.0",
-    "https": "^1.0.0"
+    "https": "^1.0.0",
+    "mongoose": "^4.13.4",
+    "passport": "^0.4.0",
+    "passport-oauth": "^1.0.0"
   }
 }
