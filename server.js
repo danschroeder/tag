@@ -113,7 +113,7 @@ passport.deserializeUser(function(user, done) {
 
 app.use(helmet());
 //app.use(expressVueMiddleware);
-app.get('/auth/canvas', passport.authenticate(authProvider, {scope: 'auth/userinfo'}));
+app.get('/auth/canvas', passport.authenticate(authProvider));// adding this gives a remember me option but it doesn't send back a token: ,{scope: '/auth/userinfo'}
 app.get('/auth/canvas/callback', passport.authenticate(authProvider, {
     successRedirect: '/home',
     failureRedirect: '/login'
@@ -121,12 +121,12 @@ app.get('/auth/canvas/callback', passport.authenticate(authProvider, {
 // app.get('/auth/provider/callback',(req, res) => {
 //     res.send();
 // });
-app.all('*',(req, res, next) =>{
-    if(typeof req.user === "undefined"){
-        res.redirect('/auth/canvas');
-    }
-    next();
-});
+// app.all('*',(req, res, next) =>{
+//     if(typeof req.user === "undefined"){
+//         res.redirect('/auth/canvas');
+//     }
+//     next();
+// });
 
 app.get('/', (req, res) => {
     console.log(req.user);
@@ -142,6 +142,7 @@ app.get('/home', (req, res) => {
 
 });
 
+
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
 
@@ -149,6 +150,7 @@ console.log(`Running on http://${HOST}:${PORT}`);
 function getUserInfo(token,callback) {
     var options = { method: 'GET',
     url: 'https://utah-valley-university.acme.instructure.com/api/v1/users/self',
+    //url: canvasConfig.baseUrl+'/login/oauth2/auth?client_id='+canvasConfig.clientID+'&response_type=code&redirect_uri=',
     headers: 
      { 'cache-control': 'no-cache',
        authorization: 'Bearer '+token } };
