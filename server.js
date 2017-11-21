@@ -7,6 +7,9 @@ const canvasConfig = {
 };
 const PORT = 3000;
 const HOST = 'localhost';
+var CanvasClient = require('./canvasClient.js');
+var canvasClient = new CanvasClient();
+console.log(canvasClient);
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost');
@@ -53,9 +56,8 @@ let oauthClient = new OAuth2Strategy({
         console.log(refToken);
         console.log(profile.id);
 
-        User.findOne({
-            userId: profile.id
-        }, function (err, user) {
+        User.findOneAndUpdate({userId: profile.id},{$set:{name: profile.name, accessToken: accToken,refreshToken: refToken}}, {new: true}, 
+            function (err, user) {
             if (err) {
                 console.log("error: " + err);
                 return done(err);
@@ -77,6 +79,7 @@ let oauthClient = new OAuth2Strategy({
                 });
             } else {
                 //found user. Return
+                
                 return done(err, user);
             }
         });
@@ -140,6 +143,16 @@ app.get('/home', (req, res) => {
 
     res.send('Congrats you are logged in and connected to canvas!!!!!');
 
+});
+
+app.get('/courses', (req, res) => {
+    canvasClient.getCurrentCourses(req.user.accessToken, function(data){
+        console.log('3'+data);
+        res.send(data);
+    });
+    
+    
+    
 });
 
 
